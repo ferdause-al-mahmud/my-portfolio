@@ -7,7 +7,9 @@ import Portfolio from './components/Portfolio';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
 import Education from './components/Education';
-
+import Footer from './components/Footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
 
   return (
@@ -15,12 +17,12 @@ function App() {
       <NavBar />
       <Home />
       <About />
-      <Education></Education>
-      <Portfolio />
       <Experience />
+      <Portfolio />
+      <Education />
       <Contact />
-
-
+      <Footer />
+      <ToastContainer />
     </>
   )
 }

@@ -1,5 +1,5 @@
 
-import HeroImage from "../../public/heroImage.png";
+import HeroImage from "/heroImage.png";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { Link } from "react-scroll";
 import SocialLinks from "./SocialLinks";
@@ -8,17 +8,22 @@ const Home = () => {
   return (
     <div
       name="home"
-      className="h-screen flex flex-col w-full pt-44 md:pt-10 bg-gradient-to-b from-black via-black to-gray-800"
+      className=" flex flex-col w-full pt-44 md:pt-10 bg-gradient-to-b from-black via-black to-gray-800"
     >
       <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center h-full px-4 md:flex-row">
         <div className="flex flex-col justify-center h-full">
           <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white">
-            I{"'"}m a MERN Stack Developer
+            I{"'"}m Mahmud
           </h2>
+
+          <h2 className="text-3xl sm:text-5xl font-bold text-white">
+            <span className="text-blue-500">MERN</span> Stack Developer
+          </h2>
+
           <p className="text-gray-500 py-4 max-w-md">
-            I have 8 years of experience building and desgining software.
+            I have 2 years of experience building and desgining software.
             Currently, I love to work on web application using technologies like
-            React, Tailwind, Next JS and GraphQL.
+            React, Tailwind, Next JS, NodeJs, MongoDB,and ExpressJs.
           </p>
 
           <div>
