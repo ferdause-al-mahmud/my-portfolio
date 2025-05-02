@@ -120,82 +120,9 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-5 gap-8">
-          {/* Contact Info Section */}
-          <motion.div
-            className="md:col-span-2 flex flex-col justify-start"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={containerVariants}
-          >
-            <motion.div
-              variants={itemVariants}
-              className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-lg shadow-cyan-500/10 mb-6 border border-gray-700"
-            >
-              <h3 className="text-2xl font-semibold mb-4 text-cyan-400">
-                Get in Touch
-              </h3>
-              <p className="text-gray-300 mb-6">
-                I&apos;m available for freelance work, interesting projects, and
-                new opportunities.
-              </p>
-
-              <motion.div
-                variants={floatingIconVariants}
-                initial="initial"
-                animate="animate"
-                className="flex flex-col gap-4"
-              >
-                <a
-                  href="https://wa.me/+8801944843541"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-5 py-3 rounded-xl hover:scale-105 duration-300 transform shadow-md"
-                >
-                  <div className="bg-white/20 p-2 rounded-lg">
-                    <FaWhatsapp className="text-xl" />
-                  </div>
-                  <span className="font-medium">Chat on WhatsApp</span>
-                </a>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              variants={itemVariants}
-              className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-lg shadow-cyan-500/10 border border-gray-700"
-            >
-              <h3 className="text-xl font-medium mb-3 text-gray-200">
-                Why Contact Me?
-              </h3>
-              <ul className="space-y-3 text-gray-300">
-                <li className="flex items-center gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  Full-stack web development with MERN (MongoDB, Express, React,
-                  Node.js)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  TypeScript-first development with Next.js and Mongoose
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  Scalable and maintainable code architecture
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  Modern, responsive UI using React and Tailwind CSS
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  Optimized performance, SEO, and best practices
-                </li>
-              </ul>
-            </motion.div>
-          </motion.div>
-
           {/* Contact Form */}
           <motion.div
-            className="md:col-span-3"
+            className="md:col-span-3 order-1"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
@@ -295,6 +222,79 @@ const Contact = () => {
                   </motion.button>
                 </motion.div>
               </form>
+            </motion.div>
+          </motion.div>
+
+          {/* Contact Info Section */}
+          <motion.div
+            className="md:col-span-2 order-2"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={containerVariants}
+          >
+            <motion.div
+              variants={itemVariants}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-lg shadow-cyan-500/10 mb-6 border border-gray-700"
+            >
+              <h3 className="text-2xl font-semibold mb-4 text-cyan-400">
+                Get in Touch
+              </h3>
+              <p className="text-gray-300 mb-6">
+                I&apos;m available for freelance work, interesting projects, and
+                new opportunities.
+              </p>
+
+              <motion.div
+                variants={floatingIconVariants}
+                initial="initial"
+                animate="animate"
+                className="flex flex-col gap-4"
+              >
+                <a
+                  href="https://wa.me/+8801944843541"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-5 py-3 rounded-xl hover:scale-105 duration-300 transform shadow-md"
+                >
+                  <div className="bg-white/20 p-2 rounded-lg">
+                    <FaWhatsapp className="text-xl" />
+                  </div>
+                  <span className="font-medium">Chat on WhatsApp</span>
+                </a>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-lg shadow-cyan-500/10 border border-gray-700"
+            >
+              <h3 className="text-xl font-medium mb-3 text-gray-200">
+                Why Contact Me?
+              </h3>
+              <ul className="space-y-3 text-gray-300">
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span>
+                  Full-stack web development with MERN (MongoDB, Express, React,
+                  Node.js)
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span>
+                  TypeScript-first development with Next.js and Mongoose
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span>
+                  Scalable and maintainable code architecture
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span>
+                  Modern, responsive UI using React and Tailwind CSS
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span>
+                  Optimized performance, SEO, and best practices
+                </li>
+              </ul>
             </motion.div>
           </motion.div>
         </div>
