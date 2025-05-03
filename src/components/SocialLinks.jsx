@@ -32,7 +32,7 @@ const SocialLinks = () => {
           <FaDownload size={24} /> Resume
         </>
       ),
-      href: "/resume.pdf",
+      href: "/mahmud_mern_resume.pdf",
       style: "from-cyan-600 to-cyan-400 hover:from-cyan-500 hover:to-cyan-300",
       download: true,
       delay: 0.7,

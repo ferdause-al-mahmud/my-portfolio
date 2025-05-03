@@ -103,6 +103,7 @@ const Experience = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
+          className="px-2"
         >
           <p className="text-4xl font-bold border-b-4 border-indigo-500 p-2 inline">
             Technical Skills
@@ -113,7 +114,7 @@ const Experience = () => {
         </motion.div>
 
         {/* Category Buttons */}
-        <div className="flex gap-2 mb-8 flex-wrap">
+        <div className="flex gap-2 mb-8 flex-wrap px-2">
           {categories.map((category, index) => (
             <motion.button
               key={index}

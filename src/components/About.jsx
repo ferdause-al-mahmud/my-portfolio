@@ -1,9 +1,10 @@
-import { useRef } from "react";
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
 import Typewriter from "typewriter-effect";
 
 const About = () => {
   const skillsRef = useRef(null);
+  const skillsControls = useAnimation();
 
   // Professional skills with proficiency levels
   const skills = [
@@ -28,13 +29,35 @@ const About = () => {
     "Creative Thinker",
   ];
 
+  // Use Intersection Observer to detect when the skills section is visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          skillsControls.start("visible");
+        }
+      },
+      { threshold: 0.1 } // Lower threshold for mobile devices
+    );
+
+    if (skillsRef.current) {
+      observer.observe(skillsRef.current);
+    }
+
+    return () => {
+      if (skillsRef.current) {
+        observer.unobserve(skillsRef.current);
+      }
+    };
+  }, [skillsControls]);
+
   return (
     <div
       id="about"
       name="about"
       className="w-full min-h-screen bg-gradient-to-b from-gray-800 via-black to-black text-white py-16"
     >
-      <div className="max-w-screen-lg py-4 mx-auto flex flex-col justify-center w-full">
+      <div className="max-w-screen-lg px-4 mx-auto flex flex-col justify-center w-full">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -130,38 +153,46 @@ const About = () => {
 
             <div className="space-y-5">
               {skills.map((skill, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, width: 0 }}
-                  whileInView={{ opacity: 1, width: "100%" }}
-                  transition={{ duration: 0.8, delay: 0.1 * index }}
-                  viewport={{ once: true, margin: "-100px" }}
-                >
+                <div key={index} className="mb-2">
                   <div className="flex justify-between mb-1">
                     <span className="font-medium text-gray-200">
                       {skill.name}
                     </span>
                     <span className="text-cyan-500">{skill.level}%</span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2.5">
+                  <div className="w-full bg-gray-700 rounded-full h-2.5 overflow-hidden">
                     <motion.div
                       className="h-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
                       initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.level}%` }}
-                      transition={{ duration: 1, delay: 0.2 + index * 0.1 }}
-                      viewport={{ once: true, margin: "-100px" }}
+                      animate={skillsControls}
+                      variants={{
+                        visible: {
+                          width: `${skill.level}%`,
+                          transition: {
+                            duration: 1,
+                            delay: 0.1 * index,
+                            ease: "easeOut",
+                          },
+                        },
+                        hidden: { width: 0 },
+                      }}
                     ></motion.div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             <motion.div
               className="mt-8 pt-6 border-t border-gray-700"
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.2 }}
-              viewport={{ once: true }}
+              animate={skillsControls}
+              variants={{
+                visible: {
+                  opacity: 1,
+                  transition: { delay: 1 },
+                },
+                hidden: { opacity: 0 },
+              }}
             >
               <h3 className="text-xl font-semibold mb-4 text-cyan-400">
                 Always Learning
@@ -177,9 +208,15 @@ const About = () => {
                     <motion.span
                       key={index}
                       initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 1.4 + index * 0.1 }}
-                      viewport={{ once: true }}
+                      animate={skillsControls}
+                      variants={{
+                        visible: {
+                          opacity: 1,
+                          y: 0,
+                          transition: { delay: 1.2 + index * 0.1 },
+                        },
+                        hidden: { opacity: 0, y: 10 },
+                      }}
                       className="px-3 py-1 bg-blue-500/10 rounded-full text-blue-300 text-sm border border-blue-500/30"
                     >
                       {tech}
