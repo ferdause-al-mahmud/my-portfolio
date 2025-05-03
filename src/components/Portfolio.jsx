@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import PetzAdopt from "/portfolio/project-1.png";
 import StudyBuddy from "/portfolio/project-2.png";
 import CraftXtore from "/portfolio/project-3.png";
@@ -135,7 +138,7 @@ const Portfolio = () => {
           viewport={{ once: true, amount: 0.1 }}
         >
           {portfolios.map(
-            ({ id, src, demo, code, projectName, description, tech }) => (
+            ({ id, src, demo, projectName, description, tech }) => (
               <motion.div
                 key={id}
                 variants={item}
@@ -143,7 +146,7 @@ const Portfolio = () => {
               >
                 <div className="relative overflow-hidden">
                   <img
-                    src={src}
+                    src={src || "/placeholder.svg"}
                     alt={projectName}
                     className="w-full object-cover h-64 transition-transform duration-700 group-hover:scale-110"
                   />
@@ -155,9 +158,11 @@ const Portfolio = () => {
                 </div>
 
                 <div className="p-6">
-                  <h1 className="text-2xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                    {projectName}
-                  </h1>
+                  <Link to={`/project/${id}`}>
+                    <h1 className="text-2xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all">
+                      {projectName}
+                    </h1>
+                  </Link>
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {tech.map((item, index) => (
@@ -197,8 +202,7 @@ const Portfolio = () => {
                       </svg>
                     </motion.a>
 
-                    {code && (
-                      <motion.a
+                    {/* <motion.a
                         rel="noreferrer"
                         target="_blank"
                         href={code}
@@ -222,8 +226,28 @@ const Portfolio = () => {
                             d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
                           />
                         </svg>
-                      </motion.a>
-                    )}
+                      </motion.a> */}
+
+                    <Link
+                      to={`/project/${id}`}
+                      className="px-5 py-2 rounded-lg border border-gray-500/30 bg-gray-700/20 text-gray-300 font-medium flex items-center gap-2 hover:bg-gray-700/40 transition-colors"
+                    >
+                      <span>View Details</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        />
+                      </svg>
+                    </Link>
                   </div>
                 </div>
               </motion.div>
