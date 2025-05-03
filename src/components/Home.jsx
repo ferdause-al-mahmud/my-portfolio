@@ -193,7 +193,7 @@ const Home = () => {
             />
             <div className="relative rounded-full overflow-hidden p-1 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 backdrop-blur-sm">
               <img
-                src="/heroImage.png"
+                src="/me2.png"
                 alt="Mahmud profile"
                 className="rounded-full mx-auto w-full max-w-[300px] md:max-w-[400px] object-cover aspect-square"
               />
