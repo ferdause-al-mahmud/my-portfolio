@@ -180,7 +180,7 @@ const Home = () => {
         >
           <div className="relative">
             <motion.div
-              className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 opacity-70 blur-xl"
+              className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 opacity-70 blur-xl"
               animate={{
                 opacity: [0.5, 0.8, 0.5],
                 scale: [1, 1.02, 1],
@@ -191,11 +191,11 @@ const Home = () => {
                 repeatType: "reverse",
               }}
             />
-            <div className="relative rounded-2xl overflow-hidden p-1 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 backdrop-blur-sm">
+            <div className="relative rounded-full overflow-hidden p-1 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 backdrop-blur-sm">
               <img
                 src="/heroImage.png"
                 alt="Mahmud profile"
-                className="rounded-xl mx-auto w-full max-w-[300px] md:max-w-[400px] object-cover"
+                className="rounded-full mx-auto w-full max-w-[300px] md:max-w-[400px] object-cover aspect-square"
               />
             </div>
 
@@ -231,20 +231,6 @@ const Home = () => {
       >
         <SocialLinks />
       </motion.div>
-
-      {/* Scroll indicator */}
-      {/* <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: [0, 1, 0], y: [0, 10, 0] }}
-        transition={{
-          opacity: { repeat: Infinity, duration: 2 },
-          y: { repeat: Infinity, duration: 2 },
-        }}
-      >
-        <span className="text-cyan-500 text-sm mb-2">Scroll Down</span>
-        <div className="w-1 h-8 rounded-full bg-gradient-to-b from-cyan-500 to-transparent" />
-      </motion.div> */}
     </div>
   );
 };
