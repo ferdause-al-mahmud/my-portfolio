@@ -3,6 +3,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import ScrollToTop from "./components/ScrollToTop";
+import { Toaster } from "react-hot-toast";
 
 function MainLayout() {
   return (
@@ -14,7 +15,7 @@ function MainLayout() {
         <Outlet /> {/* This renders the nested route components */}
       </main>
       <Footer />
-      <ToastContainer />
+      <Toaster />
     </>
   );
 }

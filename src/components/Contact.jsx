@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { toast } from "react-toastify";
 import { FaWhatsapp, FaEnvelope, FaUser, FaPaperPlane } from "react-icons/fa";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const Contact = () => {
   const form = useRef();
@@ -23,25 +23,31 @@ const Contact = () => {
 
   const sendEmail = (e) => {
     e.preventDefault();
+
+    // Basic validation
+    if (!formData.from_name || !formData.from_email || !formData.message) {
+      toast.error("Please fill out all fields.");
+      return;
+    }
+
     setSending(true);
 
     emailjs
-      .sendForm("service_8905rnv", "template_7x08lqo", form.current, {
-        publicKey: "0spwDqlHvY96Ih_Li",
-      })
+      .sendForm(
+        "service_8905rnv",
+        "template_7x08lqo",
+        form.current,
+        "b7eF2lnrl6DL8oi8b" // only public key
+      )
       .then(
         () => {
           toast.success("Your message has been sent successfully!");
-          setFormData({
-            from_name: "",
-            from_email: "",
-            message: "",
-          });
+          setFormData({ from_name: "", from_email: "", message: "" });
           form.current.reset();
           setSending(false);
         },
         (error) => {
-          console.log("FAILED...", error.text);
+          console.error("FAILED...", error);
           toast.error("Failed to send message. Please try again.");
           setSending(false);
         }
