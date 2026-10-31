@@ -1,143 +1,105 @@
+"use client";
+
 import { motion } from "framer-motion";
+import { FaBook, FaFlask, FaGraduationCap } from "react-icons/fa";
+import SectionHeading from "./ui/SectionHeading";
+
+const educationData = [
+  {
+    id: 1,
+    degree: "BSc in Computer Science and Engineering",
+    institution: "Shanto-Mariam University of Creative Technology (SMUCT)",
+    duration: "2022 - Ongoing",
+    description:
+      "Focused on software development, algorithms, and systems design",
+    icon: FaGraduationCap,
+  },
+  {
+    id: 2,
+    degree: "HSC in Science",
+    institution: "Mollartek Udayan School and College",
+    duration: "2019 - 2021",
+    description: "Concentrated on Physics, Chemistry, Mathematics, and Biology",
+    icon: FaFlask,
+  },
+  {
+    id: 3,
+    degree: "SSC in Science",
+    institution: "Mollartek Udayan School and College",
+    duration: "2017 - 2019",
+    icon: FaBook,
+  },
+];
 
 const Education = () => {
-  const educationData = [
-    {
-      id: 1,
-      degree: "BSc in Computer Science and Engineering",
-      institution: "Shanto-Mariam University of Creative Technology (SMUCT)",
-      duration: "2022 - Ongoing",
-      description:
-        "Focused on software development, algorithms, and systems design",
-      icon: "🎓",
-    },
-    {
-      id: 2,
-      degree: "HSC in Science",
-      institution: "Mollartek Udayan School and College",
-      duration: "2019 - 2021",
-      description:
-        "Concentrated on Physics, Chemistry, Mathematics, and Biology",
-      icon: "🔬",
-    },
-    {
-      id: 3,
-      degree: "SSC in Science",
-      institution: "Mollartek Udayan School and College",
-      duration: "2017 - 2019",
-      //   description:
-      //     "Built strong foundations in scientific thinking and problem-solving",
-      icon: "📚",
-    },
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { x: -50, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const titleVariants = {
-    hidden: { y: -20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut",
-      },
-    },
-  };
-
   return (
-    <div
-      name="education"
-      className="w-full min-h-screen bg-gradient-to-b from-black to-gray-800 text-white py-16"
-    >
-      <div className="max-w-screen-lg p-4 mx-auto flex flex-col justify-center w-full h-full">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={titleVariants}
-          className="mb-12"
-        >
-          <p className="text-5xl font-bold inline bordcer-b-4 pb-1 border-cyan-500 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            Education
-          </p>
-          <p className="pt-6 text-gray-300 text-lg">
-            My academic journey and qualifications
-          </p>
-        </motion.div>
+    <section id="education" className="relative py-24 sm:py-32">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <SectionHeading
+          index="05"
+          eyebrow="education"
+          title="Academic journey"
+          subtitle="My qualifications and the foundations behind my work."
+        />
 
-        <motion.div
-          className="mt-8 relative"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
-          {/* Timeline line */}
-          <div className="absolute left-0 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-1 bg-gradient-to-b from-cyan-500 to-blue-600 rounded-full hidden sm:block"></div>
+        <div className="relative">
+          {/* Timeline line with a light running down it */}
+          <div
+            className="beam-v absolute top-0 bottom-0 left-5 w-px bg-linear-to-b from-cyan-400/60 via-blue-500/40 to-transparent md:left-1/2"
+            style={{ "--duration": "4s" }}
+            aria-hidden="true"
+          />
 
-          {educationData.map((item, index) => (
-            <motion.div
-              key={item.id}
-              variants={itemVariants}
-              className={`flex flex-col sm:flex-row ${
-                index % 2 === 0 ? "sm:flex-row-reverse" : ""
-              } mb-12 relative`}
-            >
-              {/* Timeline dot */}
-              <div className="hidden sm:block absolute left-0 sm:left-1/2 transform sm:-translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/50 z-10 flex items-center justify-center text-xl">
-                {item.icon}
-              </div>
+          <ol>
+            {educationData.map((entry, index) => {
+              const Icon = entry.icon;
+              const isLeft = index % 2 === 0;
 
-              {/* Timeline content */}
-              <div
-                className={`sm:w-5/12 ${
-                  index % 2 === 0 ? "sm:pr-12" : "sm:pl-12"
-                }`}
-              >
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 hover:scale-105 group border border-gray-700 hover:border-cyan-500/30">
-                  <h3 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                    {item.degree}
-                  </h3>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-cyan-400">{item.icon}</span>
-                    <h4 className="text-lg font-medium text-gray-300">
-                      {item.institution}
-                    </h4>
+              return (
+                <motion.li
+                  key={entry.id}
+                  initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className={`relative mb-10 pl-16 last:mb-0 md:flex md:pl-0 ${
+                    isLeft ? "md:justify-start" : "md:justify-end"
+                  }`}
+                >
+                  {/* Timeline dot */}
+                  <span className="absolute top-6 left-5 z-10 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border border-cyan-400/40 bg-ink text-cyan-300 shadow-[0_0_20px_-2px] shadow-cyan-400/50 md:left-1/2">
+                    <Icon size={16} />
+                  </span>
+
+                  <div
+                    className={`md:w-[calc(50%-3rem)] ${
+                      isLeft ? "md:text-right" : ""
+                    }`}
+                  >
+                    <div className="group rounded-2xl border border-white/10 bg-surface/80 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:shadow-xl hover:shadow-cyan-500/10">
+                      <span className="inline-block rounded-full bg-cyan-400/10 px-3 py-1 font-mono text-xs text-cyan-300">
+                        {entry.duration}
+                      </span>
+                      <h3 className="mt-3 font-display text-xl font-bold text-white sm:text-2xl">
+                        {entry.degree}
+                      </h3>
+                      <p className="mt-1 font-medium text-slate-300">
+                        {entry.institution}
+                      </p>
+                      {entry.description && (
+                        <p className="mt-3 text-slate-400">
+                          {entry.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className="bg-cyan-500/10 text-cyan-300 text-sm py-1 px-3 rounded-full inline-block mb-3">
-                    {item.duration}
-                  </div>
-                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                </motion.li>
+              );
+            })}
+          </ol>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,175 +1,139 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-scroll";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+} from "framer-motion";
+import { sections } from "@/data/profile";
+import { useActiveSection, useSectionNav } from "@/hooks/useSectionNav";
 
 const NavBar = () => {
   const [nav, setNav] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeLink, setActiveLink] = useState("home");
+  const activeLink = useActiveSection(sections);
+  const goTo = useSectionNav();
 
-  // Handle scroll event for navbar background change
+  const { scrollY, scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25 });
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 40);
+  });
+
+  // Lock page scroll and allow Escape to close while the mobile menu is open
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-
-      // Update active section based on scroll position
-      const sections = [
-        "home",
-        "about",
-        "skills",
-        "portfolio",
-        "education",
-        "contact",
-      ];
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100) {
-            setActiveLink(section);
-            break;
-          }
-        }
-      }
+    if (!nav) return;
+    const onKeyDown = (e) => e.key === "Escape" && setNav(false);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
     };
+  }, [nav]);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const links = [
-    {
-      id: 1,
-      link: "home",
-      icon: "🏠",
-    },
-    {
-      id: 2,
-      link: "about",
-      icon: "👤",
-    },
-    {
-      id: 3,
-      link: "skills",
-      icon: "⚙️",
-    },
-    {
-      id: 4,
-      link: "portfolio",
-      icon: "💼",
-    },
-    {
-      id: 5,
-      link: "education",
-      icon: "🎓",
-    },
-    {
-      id: 6,
-      link: "contact",
-      icon: "📬",
-    },
-  ];
+  const handleNavigate = (e, link) => {
+    e.preventDefault();
+    setNav(false);
+    goTo(link);
+  };
 
   return (
-    <motion.div
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`flex justify-between items-center w-full h-20 px-6 text-white fixed z-50 transition-all duration-300 ${
-        scrolled ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-transparent"
+    <header
+      className={`fixed inset-x-0 top-0 z-50 animate-slide-down transition-colors duration-300 ${
+        scrolled || nav
+          ? "bg-ink/80 shadow-lg shadow-black/30 backdrop-blur-xl"
+          : "bg-transparent"
       }`}
     >
+      {/* Scroll progress */}
       <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-      >
-        <h1 className="text-3xl font-bold font-signature ml-2">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-            mahmud.dev
-          </span>
-        </h1>
-      </motion.div>
+        className="absolute inset-x-0 top-0 h-0.5 origin-left bg-linear-to-r from-cyan-400 via-sky-500 to-blue-600"
+        style={{ scaleX: progress }}
+      />
 
-      {/* Desktop Navigation */}
-      <div className="hidden md:block">
-        <motion.ul
-          className="flex gap-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
+      <nav className="mx-auto flex h-18 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <Link
+          href="/#home"
+          onClick={(e) => handleNavigate(e, "home")}
+          className="group font-mono text-xl font-semibold text-white"
+          aria-label="Go to home section"
         >
-          {links.map(({ id, link, icon }) => (
-            <motion.li
-              key={id}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
+          <span className="text-cyan-400 transition-colors group-hover:text-blue-400">
+            &lt;
+          </span>
+          mahmud
+          <span className="text-cyan-400">.dev</span>
+          <span className="text-cyan-400 transition-colors group-hover:text-blue-400">
+            /&gt;
+          </span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <ul className="hidden items-center gap-1 lg:flex">
+          {sections.map((link) => (
+            <li key={link}>
               <Link
-                to={link}
-                smooth
-                duration={500}
-                spy={true}
-                activeClass="active"
-                onSetActive={() => setActiveLink(link)}
-                className={`relative px-4 py-2 cursor-pointer capitalize font-medium rounded-full flex items-center gap-1 transition-all duration-300 ${
+                href={`/#${link}`}
+                onClick={(e) => handleNavigate(e, link)}
+                aria-current={activeLink === link ? "true" : undefined}
+                className={`relative isolate block rounded-full px-4 py-2 text-sm font-medium capitalize transition-colors duration-300 ${
                   activeLink === link
                     ? "text-white"
-                    : "text-gray-400 hover:text-white"
+                    : "text-slate-400 hover:text-white"
                 }`}
               >
-                <span className="hidden lg:inline">{icon}</span>
-                <span>{link}</span>
                 {activeLink === link && (
-                  <motion.div
+                  <motion.span
                     layoutId="activeIndicator"
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full -z-10"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 -z-10 rounded-full border border-cyan-400/30 bg-cyan-400/10"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
+                {link}
               </Link>
-            </motion.li>
+            </li>
           ))}
-        </motion.ul>
-      </div>
+        </ul>
 
-      {/* Mobile Navigation Toggle Button */}
-      <motion.div
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setNav(!nav)}
-        className="cursor-pointer pr-4 z-10 text-gray-300 md:hidden"
-      >
-        <AnimatePresence mode="wait">
-          {nav ? (
-            <motion.div
-              key="close"
+        {/* Mobile Navigation Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setNav(!nav)}
+          aria-label={nav ? "Close menu" : "Open menu"}
+          aria-expanded={nav}
+          className="relative z-10 grid h-11 w-11 place-items-center rounded-xl text-slate-300 lg:hidden"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={nav ? "close" : "menu"}
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <FaTimes size={30} className="text-cyan-500" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="menu"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FaBars size={30} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+              {nav ? (
+                <FaTimes size={24} className="text-cyan-400" />
+              ) : (
+                <FaBars size={24} />
+              )}
+            </motion.span>
+          </AnimatePresence>
+        </button>
+      </nav>
+
+      {/* Light running along the bottom edge once scrolled */}
+      <div
+        className={`light-line h-px bg-linear-to-r from-transparent via-white/10 to-transparent transition-opacity duration-500 ${
+          scrolled ? "opacity-100" : "opacity-0"
+        }`}
+      />
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -178,58 +142,39 @@ const NavBar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/95 backdrop-blur-md z-40 md:hidden"
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 top-18 h-[calc(100svh-4.5rem)] bg-ink lg:hidden"
           >
-            <motion.ul
-              className="flex flex-col justify-center items-center h-screen gap-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
-            >
-              {links.map(({ id, link, icon }, index) => (
+            <ul className="flex h-full flex-col items-center justify-center gap-4">
+              {sections.map((link, index) => (
                 <motion.li
-                  key={id}
+                  key={link}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    transition: { delay: 0.1 + index * 0.1 },
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: 20,
-                    transition: { delay: 0.05 * index },
-                  }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full text-center"
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ delay: 0.05 + index * 0.06 }}
                 >
                   <Link
-                    onClick={() => setNav(false)}
-                    to={link}
-                    smooth
-                    duration={500}
-                    className="px-4 cursor-pointer capitalize py-4 text-2xl flex items-center justify-center gap-3"
+                    href={`/#${link}`}
+                    onClick={(e) => handleNavigate(e, link)}
+                    className={`flex items-center gap-3 px-6 py-3 font-display text-3xl font-semibold capitalize transition-colors ${
+                      activeLink === link
+                        ? "text-cyan-400"
+                        : "text-slate-300 hover:text-white"
+                    }`}
                   >
-                    <span className="text-cyan-500">{icon}</span>
-                    <span className="text-white hover:text-cyan-500 transition-colors duration-300">
-                      {link}
+                    <span className="font-mono text-sm text-slate-600">
+                      0{index + 1}
                     </span>
+                    {link}
                   </Link>
-                  <motion.div
-                    className="h-px w-1/3 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mt-2"
-                    initial={{ width: 0 }}
-                    animate={{ width: "30%" }}
-                    transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
-                  />
                 </motion.li>
               ))}
-            </motion.ul>
+            </ul>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </header>
   );
 };
 
