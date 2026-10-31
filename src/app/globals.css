@@ -1,0 +1,350 @@
+@import "tailwindcss";
+
+/* Font variables are set on <html> by next/font in app/layout.jsx */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+@theme {
+  --color-ink: #05070d;
+  --color-surface: #0b111c;
+  --color-surface-2: #111a29;
+
+  --animate-gradient-x: gradient-x 6s ease infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-caret: caret 1s steps(1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-glow: glow 5s ease-in-out infinite;
+  --animate-scroll-dot: scroll-dot 1.8s ease-in-out infinite;
+
+  /* Entrance animations that run in plain CSS, so server-rendered content
+     is visible and animated before any JavaScript loads */
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-fade-scale: fade-scale 0.9s ease-out both;
+  --animate-slide-down: slide-down 0.5s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  @keyframes fade-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes slide-down {
+    from {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes glow {
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scroll-dot {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(12px);
+      opacity: 0.2;
+    }
+  }
+
+  @keyframes gradient-x {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes caret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse-ring {
+    from {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    to {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-ink font-sans text-slate-200 antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    @apply bg-cyan-400/30 text-white;
+  }
+
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-cyan-400;
+  }
+}
+
+/* ---------- Running light effects ---------- */
+
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+@layer components {
+/* A light that continuously travels around an element's border */
+.beam-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.beam-border::before {
+  content: "";
+  position: absolute;
+  /* -1px so the light sits on top of a 1px border */
+  inset: -1px;
+  z-index: -1;
+  padding: var(--beam-width, 1px);
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0% 60%,
+    var(--beam-from, var(--color-cyan-400)) 75%,
+    var(--beam-to, var(--color-blue-500)) 85%,
+    transparent 100%
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  animation: beam-spin var(--beam-speed, 4s) linear infinite;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* Only light up on hover / keyboard focus */
+.beam-on-hover::before {
+  opacity: 0;
+}
+
+.beam-on-hover:hover::before,
+.beam-on-hover:focus-within::before {
+  opacity: 1;
+}
+}
+
+/* Background grid with light pulses running along its lines */
+.grid-bg,
+.page-grid {
+  background-image:
+    linear-gradient(to right, rgb(148 163 184 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(148 163 184 / 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Spotlighted grid for a single section (e.g. the 404 page) */
+.grid-bg {
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 40%, transparent 100%);
+}
+
+/* Fixed grid behind the whole site, gently vignetted toward the edges */
+.page-grid {
+  mask-image: radial-gradient(ellipse 130% 110% at 50% 40%, #000 45%, rgb(0 0 0 / 0.3) 100%);
+}
+
+.beam-h,
+.beam-v {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.beam-h {
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.beam-v {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.beam-h::after,
+.beam-v::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: var(--duration, 7s);
+  animation-delay: var(--delay, 0s);
+}
+
+.beam-h::after {
+  top: 0;
+  height: 1px;
+  width: 160px;
+  left: -160px;
+  background: linear-gradient(to right, transparent, var(--color-cyan-400), var(--color-white));
+  box-shadow: 0 0 12px 1px var(--color-cyan-400);
+  animation-name: beam-run-x;
+}
+
+.beam-v::after {
+  left: 0;
+  width: 1px;
+  height: 160px;
+  top: -160px;
+  background: linear-gradient(to bottom, transparent, var(--color-blue-400), var(--color-white));
+  box-shadow: 0 0 12px 1px var(--color-blue-400);
+  animation-name: beam-run-y;
+}
+
+@keyframes beam-run-x {
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes beam-run-y {
+  to {
+    top: 100%;
+  }
+}
+
+/* A light streak that sweeps across a line, e.g. under the navbar */
+.light-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.light-line::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -30%;
+  width: 30%;
+  background: linear-gradient(to right, transparent, var(--color-cyan-300), transparent);
+  animation: light-sweep 3.5s ease-in-out infinite;
+}
+
+@keyframes light-sweep {
+  to {
+    left: 100%;
+  }
+}
+
+/* Shine that sweeps over a button on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgb(255 255 255 / 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s ease;
+}
+
+.btn-shine:hover::after {
+  left: 125%;
+}
+
+.text-gradient {
+  @apply bg-linear-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent;
+  background-size: 200% auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .beam-border::before,
+  .beam-h::after,
+  .beam-v::after,
+  .light-line::after,
+  .animate-marquee,
+  .animate-gradient-x,
+  .animate-float,
+  .animate-pulse-ring,
+  .animate-glow,
+  .animate-scroll-dot,
+  .animate-fade-up,
+  .animate-fade-scale,
+  .animate-slide-down,
+  .animate-caret {
+    animation: none !important;
+  }
+
+  .beam-h::after,
+  .beam-v::after,
+  .light-line::after {
+    display: none;
+  }
+}
